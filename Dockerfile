@@ -269,6 +269,17 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     sed -i '/You might want to/,/^fi$/d' install.sh && \
     yes no | ./install.sh && \
 
+# ================================
+# Jupyter
+# ================================
+$PIP_INSTALL jupyter
+# Allow access outside container.
+RUN mkdir /root/.jupyter
+RUN echo "c.NotebookApp.ip = '*'" \
+         "\nc.NotebookApp.open_browser = False" \
+         "\nc.NotebookApp.token = ''" \
+         > /root/.jupyter/jupyter_notebook_config.py
+EXPOSE 8888
 
 # =================================
 # config & cleanup
